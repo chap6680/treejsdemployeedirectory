@@ -1,4 +1,5 @@
 let getA = [];
+modalString = '';
 
 function getN() {
 	fetch('https://randomuser.me/api/?results=12')
@@ -110,11 +111,16 @@ console.log(tempX); */
 	})
 }) */
 
+function modaldata() { 
+	modalString = '<div><img src="images/emppic1.png">	<h1>Modal Example</h1>	</div><div>	<p>david.chapman@asdf.com</p>	<p>Denver</p>	<hr>	<p>314-313-3283</p>	<p>7741 Cornell Ave, St Louis MO 63105</p>	<p>Birthday: 10/22/1971</p>	</div>'
+}
+
 var modal = document.querySelector("#modal");
 var modalOverlay = document.querySelector("#modal-overlay");
 var closeButton = document.querySelector("#close-button");
 var openButton = document.querySelector("#open-button");
 var openButtonArray = document.querySelector("#open-button-array");
+var modalDataElement = document.getElementById('modal-data');
 
 
 closeButton.addEventListener("click", function () {
@@ -127,9 +133,14 @@ openButton.addEventListener("click", function () {
 	modalOverlay.classList.toggle("closed");
 });
 
+modalDataElement.addEventListener("click", function () {
+modalDataElement.innerHTML=modalString;
+});
+
 openButtonArray.addEventListener("click", function () {
 	alert(getA[3].dob);
 });
 
 
-console.log('last: ', );
+modaldata();
+console.log(modalString)
