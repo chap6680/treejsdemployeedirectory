@@ -22,7 +22,7 @@ function getP() {
 		.then(response => response.json())
 		.then(data => {
 			// Here's a list of repos!  console.log(data)
-			console.log('xxx:',data);
+			console.log('xxx:', data);
 			getA = data.results;
 
 			rungetA();
@@ -73,10 +73,10 @@ function rungetA() {
 	let tempno = 0;
 	getA.map(function (author) {
 
-		console.log('count: ',tempno);
+		console.log('count: ', tempno);
 		let creatediv = createDiv('div', 'item', tempno),
 			img = createNode('img'),
-			createdivitem = createItemDiv('div', 'itemtext',),
+			createdivitem = createItemDiv('div', 'itemtext', ),
 			spanName = createNode('p');
 		spanEmail = createNode('p');
 		spanState = createNode('p');
@@ -126,7 +126,7 @@ console.log(tempX); */
 	})
 }) */
 
-function modaldata() { 
+function modaldata() {
 	modalString = '<div><img src="images/emppic1.png">	<h1>Modal Example</h1>	</div><div>	<p>david.chapman@asdf.com</p>	<p>Denver</p>	<hr>	<p>314-313-3283</p>	<p>7741 Cornell Ave, St Louis MO 63105</p>	<p>Birthday: 10/22/1971</p>	</div>'
 };
 
@@ -162,56 +162,97 @@ backButton.addEventListener("click", function () {
 });
 
 closeButton.addEventListener("click", function () {
-	modal.classList.toggle("closed");
-	modalOverlay.classList.toggle("closed");
+	setTimeout(function () {
+
+		modal.classList.toggle("closed");
+		modalOverlay.classList.toggle("closed")
+	}, 400);
 });
 
 openButton.addEventListener("click", function () {
+
 	modalFromArray(getArrayLocation);
-	modalDataInfo.innerHTML=modalString;
-	modal.classList.toggle("closed");
-	modalOverlay.classList.toggle("closed");
+
+	setTimeout(function () {
+		modalDataInfo.innerHTML = modalString;
+		modal.classList.toggle("closed");
+		modalOverlay.classList.toggle("closed");
+		modalOverlay.classList.toggle("fade");
+
+	}, 1000);
+
+	/* 	modalDataInfo.innerHTML = modalString;	
+		modal.classList.toggle("closed");
+		modalOverlay.classList.toggle("closed"); */
 });
 
-function openModal() { 
+function openModal() {
 	modalFromArray(getArrayLocation);
-	modalDataInfo.innerHTML=modalString;
-	modal.classList.toggle("closed");
-	modalOverlay.classList.toggle("closed");
-}
-function advanceModal() { 
-/* 	modalOverlay.classList.toggle("fade");
- */	modal.classList.toggle("fade");
-	modalFromArray(getArrayLocation);
-	
-	setTimeout(function(){
+
+	setTimeout(function () {
+
+		modalDataInfo.innerHTML = '';
+		modal.classList.toggle("closed");
+		modalOverlay.classList.toggle("closed")
+	}, 300);
+
+	setTimeout(function () {
 		modalDataInfo.innerHTML = modalString;
+
+	}, 300);
+}
+
+
+function advanceModal() {
+	/* 	modalOverlay.classList.toggle("fade");
+	 */
+	modalFromArray(getArrayLocation);
+	modalDataInfo.classList.add('fade');
+	/*
+	setTimeout(function(){
+	
+	
+	}, 300); */
+
+	setTimeout(function () {
+		/* modalDataInfo.innerHTML = modalString;
+		 */
+		modalDataInfo.innerHTML = '';
+		/* 			modalDataInfo.classList.toggle("fade");
+		 */
 	}, 500);
-        setTimeout(function(){
-/* 			modalOverlay.classList.toggle("fade");
- */			modal.classList.toggle("fade");
-		
-        }, 1000);
+	setTimeout(function () {
+		/* modalDataInfo.innerHTML = modalString;
+		 */
+		modalDataInfo.innerHTML = modalString;
+		/* 			modalDataInfo.classList.toggle("fade");
+		 */
+	}, 600);
 };
 
 
 /* openButtonArray.addEventListener("click", function () {
 	alert(getA[3].dob);
-}) */;
+}) */
+;
 gridSelector.addEventListener("click", function (e) {
-//	alert('clicked');
-/* 	let clickedItem = e.target;
-	console.log('clicked item: ', clickedItem);
- */
+	//	alert('clicked');
+	/* 	let clickedItem = e.target;
+		console.log('clicked item: ', clickedItem);
+	 */
 	getArrayLocation = Number(e.target.id.split("-").pop());
 	openModal();
 	/* console.log('clicked item id: ', e.target.id, " net to: ", getArrayLocation);
-	console.log(getA[getArrayLocation]) */;
+	console.log(getA[getArrayLocation]) */
+	;
 
 
 	//	alert("Hello " + clickedItem);
 });
 
 
-modaldata();
+/* modaldata();
 console.log(modalString)
+ */
+let createSearchString = '<input type="text" id="studentSearch" name="studentSearch" placeholder="Search for students..."> <button onclick="studentSearchII(10)">Search</button> <button onclick="clearstudentSearchII()">Clear</button>'
+document.getElementsByClassName('student-search')[0].innerHTML = createSearchString;

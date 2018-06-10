@@ -13,9 +13,8 @@
 <body>
 	<h1>AWESOME STARTUP EMPLOYEE DIRECTORY</h1>
 
-	<!-- 	<div class="item">3</div>
- -->
-
+	<div class="student-search"><br>
+		</div>
 
 	<div id="container" class="container">
 
@@ -40,10 +39,15 @@
 
 	<ul id="authors"></ul>
 
-	<div class="modal-overlay" id="modal-overlay"></div>
+	<div class="modal-overlay closed fade" id="modal-overlay"></div>
 
-	<div class="modal" id="modal">
-		<div id='modalContainer'></div>
+	<div class="modal closed fade" id="modal">
+			<button class="close-button" id="close-button">X</button> 
+			<button class="close-button" id="forward-button">></button> 
+			<button class="close-button" id="back-button"><</button> 
+	
+
+
 		<!-- <button class="close-button" id="close-button">Obvious Close Button</button> -->
 	<!-- 	<div class="container">
 				<img src="img_snow.jpg" alt="Snow">
@@ -59,13 +63,10 @@ y<button id="close-button" class="modal-nav"></button>
 
 -->
 
-		<button class="close-button" id="close-button">X</button> 
-		<button class="close-button" id="forward-button">></button> 
-		<button class="close-button" id="back-button"><</button> 
 
 
 
-		<div class="modal-guts">
+		<div class="modal-guts fade">
 			<div id="modal-data">
 				<div>
 					<img src="images/emppic1.png">
