@@ -1,8 +1,9 @@
 let getA = [];
 modalString = '';
 modalString2 = '';
-getArrayLocation = 0;
-
+let getArrayLocation = 0;
+let prevArrayLocation = -1;
+let origArray = [];
 
 function getN() {
 	fetch('https://randomuser.me/api/?results=12')
@@ -26,6 +27,7 @@ function getP() {
 			getA = data.results;
 
 			rungetA();
+			origArray = getA;
 			//return data;
 		});
 };
@@ -66,6 +68,7 @@ const url = 'https://randomuser.me/api/?results=12';
 getP();
 //getA = getP();
 
+
 console.log('getA:  ', getA);
 
 function rungetA() {
@@ -95,6 +98,8 @@ function rungetA() {
 		append(group, creatediv);
 		tempno += 1;
 	});
+
+	eventListenItems();
 }
 
 console.log('getX:  ', getA);
@@ -150,7 +155,6 @@ let modalDataInfo = document.getElementById('modal-data');
 var updateDataButton = document.querySelector('#data-button');
 var gridSelector = document.getElementById("container");
 
-
 forwardButton.addEventListener("click", function () {
 	getArrayLocation += 1;
 	advanceModal();
@@ -163,43 +167,62 @@ backButton.addEventListener("click", function () {
 
 closeButton.addEventListener("click", function () {
 	setTimeout(function () {
-
-		modal.classList.toggle("closed");
-		modalOverlay.classList.toggle("closed")
-	}, 400);
-});
-
-openButton.addEventListener("click", function () {
-
-	modalFromArray(getArrayLocation);
-
-	setTimeout(function () {
-		modalDataInfo.innerHTML = modalString;
 		modal.classList.toggle("closed");
 		modalOverlay.classList.toggle("closed");
-		modalOverlay.classList.toggle("fade");
+		backButton.classList.remove('closed');
+		forwardButton.classList.remove('closed');
+		prevArrayLocation = -1;
+	}, 400);
 
-	}, 1000);
-
-	/* 	modalDataInfo.innerHTML = modalString;	
-		modal.classList.toggle("closed");
-		modalOverlay.classList.toggle("closed"); */
 });
+
 
 function openModal() {
 	modalFromArray(getArrayLocation);
 
+	modalDataInfo.innerHTML = '';
+	modal.classList.toggle("closed");
+	modalOverlay.classList.toggle("closed")
+	modalOverlay.classList.toggle('fadeIn');
+	modal.classList.toggle('fadeIn');
+
+	modalDataInfo.innerHTML = modalString;
+	/* 	setTimeout(function () {
+
+			modalDataInfo.innerHTML = '';
+			modal.classList.toggle("closed");
+			modalOverlay.classList.toggle("closed")
+			modalOverlay.classList.toggle('fadeIn');
+			modal.classList.toggle('fadeIn');
+		}, 300);
+	 */
+	/* 	setTimeout(function () {
+			modalDataInfo.innerHTML = modalString;
+		}, 300);
+	 */
+	if (getArrayLocation == 0) {
+		if (getA.length == 1) {
+			backButton.classList.toggle('closed');
+			forwardButton.classList.toggle('closed');
+		} else {
+			backButton.classList.toggle('closed')
+		}	
+	} else if (getArrayLocation == getA.length - 1  ) {
+		forwardButton.classList.toggle('closed');
+	}
+
+	console.log('start new modal');
 	setTimeout(function () {
+		modalOverlay.classList.toggle('fadeIn');
+		modal.classList.toggle('fadeIn');
+	}, 3000);
 
-		modalDataInfo.innerHTML = '';
-		modal.classList.toggle("closed");
-		modalOverlay.classList.toggle("closed")
-	}, 300);
+	console.log('current: ', getArrayLocation);
+	console.log('prev: ', prevArrayLocation);
+	//	checkFirstLastNav();;
 
-	setTimeout(function () {
-		modalDataInfo.innerHTML = modalString;
+	prevArrayLocation = getArrayLocation;
 
-	}, 300);
 }
 
 
@@ -207,52 +230,133 @@ function advanceModal() {
 	/* 	modalOverlay.classList.toggle("fade");
 	 */
 	modalFromArray(getArrayLocation);
-	modalDataInfo.classList.add('fade');
-	/*
-	setTimeout(function(){
-	
-	
-	}, 300); */
+
+	modalDataInfo.classList.toggle('fadeOut');
 
 	setTimeout(function () {
-		/* modalDataInfo.innerHTML = modalString;
-		 */
-		modalDataInfo.innerHTML = '';
-		/* 			modalDataInfo.classList.toggle("fade");
-		 */
-	}, 500);
-	setTimeout(function () {
-		/* modalDataInfo.innerHTML = modalString;
-		 */
 		modalDataInfo.innerHTML = modalString;
-		/* 			modalDataInfo.classList.toggle("fade");
-		 */
-	}, 600);
+
+	}, 500);
+
+	setTimeout(function () {
+		modalDataInfo.classList.toggle('fadeOut');
+		modalDataInfo.classList.toggle('fadeIn');
+	}, 1000);
+
+	//remove fadein
+	setTimeout(function () {
+		modalDataInfo.classList.toggle('fadeIn');
+
+	}, 2500);
+
+	/* 	setTimeout(function () {
+			/* modalDataInfo.innerHTML = modalString;
+			
+			modalDataInfo.innerHTML = modalString;
+			/* 			modalDataInfo.classList.toggle("fade");
+			 
+		}, 600);
+	 */
+	console.log('current: ', getArrayLocation);
+	console.log('prev: ', prevArrayLocation);
+	checkFirstLastNav();
+	prevArrayLocation = getArrayLocation;
 };
 
+function checkFirstLastNav() {
+	if (getArrayLocation == 0) {
+		backButton.classList.toggle('closed');
+	} else if (prevArrayLocation == 0) {
+		backButton.classList.toggle('closed');
+	};
+
+	if (getArrayLocation == getA.length - 1) {
+		forwardButton.classList.toggle('closed');
+	} else if (prevArrayLocation == getA.length - 1) {
+		forwardButton.classList.remove('closed');
+	}
+}
 
 /* openButtonArray.addEventListener("click", function () {
 	alert(getA[3].dob);
 }) */
-;
-gridSelector.addEventListener("click", function (e) {
-	//	alert('clicked');
-	/* 	let clickedItem = e.target;
-		console.log('clicked item: ', clickedItem);
-	 */
-	getArrayLocation = Number(e.target.id.split("-").pop());
+
+window.onload = function () {
+	let rows = document.querySelectorAll('.item');
+	console.log('rows:', rows.length);
+	rows.forEach(row => row.addEventListener('click', showId));
+}
+
+function eventListenItems() { 
+	let rows = document.querySelectorAll('.item');
+	console.log('rows:', rows.length);
+	rows.forEach(row => row.addEventListener('click', showId));
+}
+
+
+
+function showId(e) {
+	console.log("Using this:", this.id);
+	console.log("Using e.currentTarget:", e.currentTarget.id);
+
+	getArrayLocation = Number(this.id.split("-").pop());
 	openModal();
-	/* console.log('clicked item id: ', e.target.id, " net to: ", getArrayLocation);
-	console.log(getA[getArrayLocation]) */
-	;
+}
 
 
-	//	alert("Hello " + clickedItem);
-});
 
 
 /* modaldata();
 console.log(modalString)
  */
-let createSearchString = '<input type="text" id="studentSearch" name="studentSearch" placeholder="Search for students..."> <button onclick="studentSearchII(10)">Search</button> <button onclick="clearstudentSearchII()">Clear</button>'
+let createSearchString = '<input type="text" id="studentSearch" name="studentSearch" placeholder="Search for students..."> <button onclick="clearSearch()">Clear</button>'
 document.getElementsByClassName('student-search')[0].innerHTML = createSearchString;
+
+function clearSearch() {
+	getA = origArray;
+	document.getElementById("studentSearch").value = '';
+	var myNode = document.getElementById("container");
+	while (myNode.firstChild) {
+		myNode.removeChild(myNode.firstChild);
+	};
+
+	rungetA();
+	
+};
+
+
+document.getElementById('studentSearch').onkeyup = function () { 
+	let key = event.keyCode || event.charCode;
+	console.log('key ', key);
+/* 	if (key == 8 || key == 46) { return false }; */
+	if (key === 8) {
+		studentSearchII('reset');;
+	 };
+	if (document.getElementById('studentSearch').value.length > 2) {
+		studentSearchII();
+	} else if (getA.length !== 12) {
+		getA = origArray;
+		rungetA();
+	 }
+}
+
+function studentSearchII(blockNum) {
+	if (blockNum = 'reset') { 
+		getA = origArray;
+	};
+	let getstudentSearch = document.getElementById("studentSearch").value;
+	console.log(getstudentSearch);
+	getA.forEach(function (x) {
+		console.log(x.name.first, ' ', x.login.username);
+	})
+	const result = getA.filter(info => info.name.first.includes(getstudentSearch) || info.name.last.includes(getstudentSearch) || info.login.username.includes(getstudentSearch));
+	console.log('result: ', result);
+	getA = result;
+
+	var myNode = document.getElementById("container");
+	while (myNode.firstChild) {
+		myNode.removeChild(myNode.firstChild);
+	};
+
+	rungetA();
+};

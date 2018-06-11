@@ -26,6 +26,10 @@ hr {
 	font-size: 20px;
 }
 
+#studentSearch {
+	margin-bottom: 12px;
+}
+
 .container {
 	display: grid;
 	grid-gap: 20px;
@@ -217,39 +221,24 @@ float:right;
   }
 
 
-  .fade { 
-    animation: fadein 2s;
+.fadeIn {
+	-webkit-animation-name: fadeIn;
+	animation: fadeIn .5s linear forwards;
+ }
+
+ @keyframes fadeIn {
+	0% { opacity:0; }
+	100% { opacity:1; }    
+   }
    
-}
-@keyframes fadein {
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
-}
-@-moz-keyframes fadein { /* Firefox */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
-}
-@-webkit-keyframes fadein { /* Safari and Chrome */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
-}
-@-o-keyframes fadein { /* Opera */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity: 1;
-    }
-}
+
+.fadeOut {
+	-webkit-animation-name: fadeOut;
+	animation: fadeOut .5s linear forwards;
+ }
+
+@keyframes fadeOut {
+	0% {opacity: 1;}
+	100% {opacity: 0;}
+ }
+ 
