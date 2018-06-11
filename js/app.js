@@ -1,41 +1,27 @@
-let getA = [];
-modalString = '';
-modalString2 = '';
+let curEmpArray = [];
+let modalString = '';
+let modalString2 = '';
 let getArrayLocation = 0;
 let prevArrayLocation = -1;
 let origArray = [];
+const group = document.getElementById('container');
+const url = 'https://randomuser.me/api/?results=12';
 
-function getN() {
-	fetch('https://randomuser.me/api/?results=12')
-		.then(function (response) {
-			return response.json().results;
-		})
-	/* 		.then(function (myJson) {
-				return response.json();
-				//console.log(myJson);
-			});
-			 */
-};
 
-function getP() {
-	console.log('insideP');
+function getAPIdata() {
+
 	fetch('https://randomuser.me/api/?results=12')
 		.then(response => response.json())
 		.then(data => {
-			// Here's a list of repos!  console.log(data)
-			console.log('xxx:', data);
-			getA = data.results;
+			curEmpArray = data.results;
 
-			rungetA();
-			origArray = getA;
-			//return data;
+			createEmpGrid();
+			origArray = curEmpArray;
+
 		});
 };
 
-function calcme(num) {
-	num = num * num;
-	return num;
-};
+////////////FUNCTIONS TO CREATE CSS ELEMENTS FOR EMPLOYEE GRID
 
 function createDiv(element, classN, tempno) {
 	tempID = 'item-' + tempno;
@@ -60,23 +46,21 @@ function append(parent, el) {
 	return parent.appendChild(el); // Append the second parameter(element) to the first one
 };
 
-let scratch = fetch('https://randomuser.me/api/?results=12');
-
-const group = document.getElementById('container');
-const url = 'https://randomuser.me/api/?results=12';
-
-getP();
-//getA = getP();
+// XXXXXXXXXXXXXXXXX end FUNCTIONS TO CREATE CSS ELEMENTS FOR EMPLOYEE GRID XXXXX
 
 
-console.log('getA:  ', getA);
+//let scratch = fetch('https://randomuser.me/api/?results=12');
 
-function rungetA() {
-	console.log('start rungetA');
+
+getAPIdata();
+
+
+/// FUNCTION TO BUILD VISIBLE GRID ////////////////////////
+
+function createEmpGrid() {
 	let tempno = 0;
-	getA.map(function (author) {
+	curEmpArray.map(function (author) {
 
-		console.log('count: ', tempno);
 		let creatediv = createDiv('div', 'item', tempno),
 			img = createNode('img'),
 			createdivitem = createItemDiv('div', 'itemtext', ),
@@ -102,34 +86,22 @@ function rungetA() {
 	eventListenItems();
 }
 
-console.log('getX:  ', getA);
+
+/// CREATE EVENTLISTENER FOR GRID ITEMS - WHEN CLICKED: OPENS MODAL ///
+function eventListenItems() {
+	let rows = document.querySelectorAll('.item');
+	
+	rows.forEach(row => row.addEventListener('click', showId));
+}
+
+function showId(e) {
+
+	getArrayLocation = Number(this.id.split("-").pop());
+	openModal();
+}
 
 
-//console.log(getN());
-/* let listP = getP();
-console.log("listP: ", listP);
- */
-/* let listP = getP();
-console.log("listP: ", listP);
- */
-/* let tempX = calcme(5);
-console.log(calcme(4));
-console.log(tempX); */
-//console.log('slowly:',listN);
-
-/* .then(function (data) {
-	let authors = data.results;
-	return authors.map(function (author) {
-		let li = createNode('li'),
-			img = createNode('img'),
-			span = createNode('span');
-		img.src = author.picture.medium;
-		span.innerHTML = `${author.name.first} ${author.name.last}`;
-		append(li, img);
-		append(li, span);
-		append(ul, li);
-	})
-}) */
+/////////////// FUNCTIONS RELATING TO MODAL WINDOW WHEN GRID IS CLICKED //////////
 
 function modaldata() {
 	modalString = '<div><img src="images/emppic1.png">	<h1>Modal Example</h1>	</div><div>	<p>david.chapman@asdf.com</p>	<p>Denver</p>	<hr>	<p>314-313-3283</p>	<p>7741 Cornell Ave, St Louis MO 63105</p>	<p>Birthday: 10/22/1971</p>	</div>'
@@ -137,9 +109,8 @@ function modaldata() {
 
 function modalFromArray(getArrayLocation) {
 	modalString = `<div>
-	<img src=${getA[getArrayLocation].picture.large}>
-	<h1>${getA[getArrayLocation].name.first} ${getA[getArrayLocation].name.last}</h1>
-</div><div>	<p>${getA[getArrayLocation].email}</p>	<p>${getA[getArrayLocation].location.city}</p>	<hr>	<p>${getA[getArrayLocation].phone}</p>	<p>${getA[getArrayLocation].location.street} ${getA[getArrayLocation].location.city}, ${getA[getArrayLocation].location.state} ${getA[getArrayLocation].location.postcode}</p>	<p>Birthday: ${getA[getArrayLocation].dob}</p>	</div>`
+	<img src=${curEmpArray[getArrayLocation].picture.large}>
+	<h1>${curEmpArray[getArrayLocation].name.first} ${curEmpArray[getArrayLocation].name.last}</h1></div><div>	<p>${curEmpArray[getArrayLocation].email}</p>	<p>${curEmpArray[getArrayLocation].location.city}</p>	<hr>	<p>${curEmpArray[getArrayLocation].phone}</p>	<p>${curEmpArray[getArrayLocation].location.street} ${curEmpArray[getArrayLocation].location.city}, ${curEmpArray[getArrayLocation].location.state} ${curEmpArray[getArrayLocation].location.postcode}</p>	<p>Birthday: ${curEmpArray[getArrayLocation].dob}</p>	</div>`
 };
 
 modalString2 = '<div><img src="images/emppic1.png">	<h1>Modal Example</h1>	</div><div>	<p>dc@asdf.com</p>	<p>Denver</p>	<hr>	<p>999-999-2332</p>	<p>7741 Cornell Ave, Denver CO 99999</p>	<p>Birthday: 10/22/2000</p>	</div>'
@@ -187,39 +158,22 @@ function openModal() {
 	modal.classList.toggle('fadeIn');
 
 	modalDataInfo.innerHTML = modalString;
-	/* 	setTimeout(function () {
-
-			modalDataInfo.innerHTML = '';
-			modal.classList.toggle("closed");
-			modalOverlay.classList.toggle("closed")
-			modalOverlay.classList.toggle('fadeIn');
-			modal.classList.toggle('fadeIn');
-		}, 300);
-	 */
-	/* 	setTimeout(function () {
-			modalDataInfo.innerHTML = modalString;
-		}, 300);
-	 */
+	
 	if (getArrayLocation == 0) {
-		if (getA.length == 1) {
+		if (curEmpArray.length == 1) {
 			backButton.classList.toggle('closed');
 			forwardButton.classList.toggle('closed');
 		} else {
 			backButton.classList.toggle('closed')
-		}	
-	} else if (getArrayLocation == getA.length - 1  ) {
+		}
+	} else if (getArrayLocation == curEmpArray.length - 1) {
 		forwardButton.classList.toggle('closed');
 	}
 
-	console.log('start new modal');
 	setTimeout(function () {
 		modalOverlay.classList.toggle('fadeIn');
 		modal.classList.toggle('fadeIn');
 	}, 3000);
-
-	console.log('current: ', getArrayLocation);
-	console.log('prev: ', prevArrayLocation);
-	//	checkFirstLastNav();;
 
 	prevArrayLocation = getArrayLocation;
 
@@ -227,9 +181,7 @@ function openModal() {
 
 
 function advanceModal() {
-	/* 	modalOverlay.classList.toggle("fade");
-	 */
-	modalFromArray(getArrayLocation);
+		modalFromArray(getArrayLocation);
 
 	modalDataInfo.classList.toggle('fadeOut');
 
@@ -249,19 +201,11 @@ function advanceModal() {
 
 	}, 2500);
 
-	/* 	setTimeout(function () {
-			/* modalDataInfo.innerHTML = modalString;
-			
-			modalDataInfo.innerHTML = modalString;
-			/* 			modalDataInfo.classList.toggle("fade");
-			 
-		}, 600);
-	 */
-	console.log('current: ', getArrayLocation);
-	console.log('prev: ', prevArrayLocation);
 	checkFirstLastNav();
 	prevArrayLocation = getArrayLocation;
 };
+
+///FORWARD AND BACKWARD BUTTONS - HIDE IF FIRST OR LAST ITEM CHOSEN
 
 function checkFirstLastNav() {
 	if (getArrayLocation == 0) {
@@ -270,93 +214,71 @@ function checkFirstLastNav() {
 		backButton.classList.toggle('closed');
 	};
 
-	if (getArrayLocation == getA.length - 1) {
+	if (getArrayLocation == curEmpArray.length - 1) {
 		forwardButton.classList.toggle('closed');
-	} else if (prevArrayLocation == getA.length - 1) {
+	} else if (prevArrayLocation == curEmpArray.length - 1) {
 		forwardButton.classList.remove('closed');
 	}
 }
 
-/* openButtonArray.addEventListener("click", function () {
-	alert(getA[3].dob);
-}) */
+
+//XXXXXXXXXXXXXX END  FUNCTIONS RELATING TO MODAL WINDOW WHEN GRID IS CLICKED XXXXXXXXXXX
+
 
 window.onload = function () {
 	let rows = document.querySelectorAll('.item');
-	console.log('rows:', rows.length);
-	rows.forEach(row => row.addEventListener('click', showId));
-}
-
-function eventListenItems() { 
-	let rows = document.querySelectorAll('.item');
-	console.log('rows:', rows.length);
 	rows.forEach(row => row.addEventListener('click', showId));
 }
 
 
-
-function showId(e) {
-	console.log("Using this:", this.id);
-	console.log("Using e.currentTarget:", e.currentTarget.id);
-
-	getArrayLocation = Number(this.id.split("-").pop());
-	openModal();
-}
-
-
-
-
-/* modaldata();
-console.log(modalString)
- */
+// ADDS SEARCH STRING to the DOM - IF JAVASCRIPT IS NOT ENABLED - search field shouldnt show up
 let createSearchString = '<input type="text" id="studentSearch" name="studentSearch" placeholder="Search for students..."> <button onclick="clearSearch()">Clear</button>'
 document.getElementsByClassName('student-search')[0].innerHTML = createSearchString;
 
+//BUTTON - clear search field and reset to original Array
 function clearSearch() {
-	getA = origArray;
+	curEmpArray = origArray;
 	document.getElementById("studentSearch").value = '';
 	var myNode = document.getElementById("container");
 	while (myNode.firstChild) {
 		myNode.removeChild(myNode.firstChild);
 	};
 
-	rungetA();
-	
+	createEmpGrid();
 };
 
-
-document.getElementById('studentSearch').onkeyup = function () { 
+//search - activated when user enters 3 letters in search field
+// key 8 is the bckspace key
+document.getElementById('studentSearch').onkeyup = function (event) {
 	let key = event.keyCode || event.charCode;
-	console.log('key ', key);
-/* 	if (key == 8 || key == 46) { return false }; */
+
 	if (key === 8) {
 		studentSearchII('reset');;
-	 };
+	};
 	if (document.getElementById('studentSearch').value.length > 2) {
 		studentSearchII();
-	} else if (getA.length !== 12) {
-		getA = origArray;
-		rungetA();
-	 }
+	} else if (curEmpArray.length !== 12) {
+		curEmpArray = origArray;
+		createEmpGrid();
+	}
 }
 
+// function running search query; bringing back results.
 function studentSearchII(blockNum) {
-	if (blockNum = 'reset') { 
-		getA = origArray;
+	if (blockNum = 'reset') {
+		curEmpArray = origArray;
 	};
 	let getstudentSearch = document.getElementById("studentSearch").value;
-	console.log(getstudentSearch);
-	getA.forEach(function (x) {
-		console.log(x.name.first, ' ', x.login.username);
+		curEmpArray.forEach(function (x) {
+/* 		console.log(x.name.first, ' ', x.login.username); */
 	})
-	const result = getA.filter(info => info.name.first.includes(getstudentSearch) || info.name.last.includes(getstudentSearch) || info.login.username.includes(getstudentSearch));
-	console.log('result: ', result);
-	getA = result;
+	const result = curEmpArray.filter(info => info.name.first.includes(getstudentSearch) || info.name.last.includes(getstudentSearch) || info.login.username.includes(getstudentSearch));
+	curEmpArray = result;
 
 	var myNode = document.getElementById("container");
 	while (myNode.firstChild) {
 		myNode.removeChild(myNode.firstChild);
 	};
 
-	rungetA();
+	createEmpGrid();
 };
